@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.AutoTimedForward;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -26,6 +27,9 @@ public class RobotContainer {
 
   // Setups arcade drive command for robot (Y axis returns inverted values)
   private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, () -> -driverGamepad.getY(Hand.kLeft), () -> driverGamepad.getX(Hand.kLeft));
+
+  // Creates object for autonomous command
+  private final AutoTimedForward autoTimedForward = new AutoTimedForward(drivetrain);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -54,6 +58,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return autoTimedForward;
   }
 }
