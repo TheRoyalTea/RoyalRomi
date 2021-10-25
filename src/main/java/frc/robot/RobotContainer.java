@@ -6,9 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.RomiDrivetrain;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -17,14 +18,19 @@ import edu.wpi.first.wpilibj2.command.Command;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
+  // Creates object for driver gamepad
+  private final XboxController driverGamepad = new XboxController(Constants.DRIVER_GAMEPAD_PORT);
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);
+  // The robot's subsystems and commands are defined here...
+  private final Drivetrain drivetrain = new Drivetrain();
+
+  // Setups arcade drive command for robot (Y axis returns inverted values)
+  private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, () -> -driverGamepad.getY(Hand.kLeft), () -> driverGamepad.getX(Hand.kLeft));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
+    // Configure the keybinding
+    configureAxes();
     configureButtonBindings();
   }
 
@@ -36,6 +42,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {}
 
+  private void configureAxes() {
+    // Setups joysticks for drive
+    drivetrain.setDefaultCommand(arcadeDrive);
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -43,6 +54,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }
